@@ -3,7 +3,26 @@ class Job:
         self.job_type = job_type
 
 
+employees = {}
+
+
+def assign_lead(job_type):
+    best_success_rate = -1
+    best_lead = None
+
+    for employee in employees.values():
+        if job_type in employee.performance:
+            success_rate = employee.get_success_rate(job_type)
+            if success_rate > best_success_rate:
+                best_success_rate = success_rate
+                best_lead = employee
+
+    print(f"{best_lead.name} has been assigned to this job.")
+    print(f"Their success rate for this job type is: {best_success_rate}%")
+
+
 class Employee:
+
     def __init__(self, name):
         self.name = name
         self.performance = {}
@@ -22,17 +41,14 @@ class Employee:
             return successes / attempts if attempts > 0 else 0
         return 0
 
-    def get_overall_success_rate(self):
-        total_successes = 0
-        total_attempts = 0
-        for data in self.performance.values():
-            total_successes += data['successes']
-            total_attempts += data['attempts']
-        if total_attempts == 0:
-            return 0
-        return total_successes / total_attempts
+    def get_overall_success_rate(self, job_type = None):
+        if job_type in self.performance:
+            total_successes = sum(data['successes'] for data in self.performance.values())
+            total_attempts = sum(data['attempts'] for data in self.performance.values())
+            return total_successes/total_attempts if total_attempts > 0 else 0
 
     def display_info(self):
+        print("")
         print(f"Employee Name: {self.name}")
         print("Performance Data: ")
         if not self.performance:
@@ -46,4 +62,5 @@ class Employee:
             print(f"    Success Rate: {success_rate:,.2%}")
 
         overall_success_rate = self.get_overall_success_rate()
+        print("")
         print(f"Overall Success Rate: {overall_success_rate:.2%}\n")
