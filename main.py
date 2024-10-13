@@ -1,6 +1,8 @@
 from datetime import datetime
-from Employee_Data import Job, Employee
-def Greet():
+from Employee_Data import Job, Employee, employees, assign_lead
+
+
+def greet():
     hour = datetime.now().hour
     greeting = (
         "Good morning!" if 5 <= hour < 12
@@ -8,19 +10,20 @@ def Greet():
         else "Good evening!"
     )
     print(greeting)
-Greet()
+
+
+greet()
 
 
 def main():
-    employees = {}
-
     while True:
         print("\n--- Employee Performance System ---")
         print("1. Add New Employee")
         print("2. Update Job Performance")
         print("3. Display employee data")
-        print("4. Show Overall Success Rate")
+        print("4. Assign Sales Lead")
         print("5. Exit")
+        print("")
 
         choice = input("Choose an option (1-5): ")
         if choice == '1':
@@ -46,16 +49,14 @@ def main():
             name = input("Enter employee name to display data: ")
             if name in employees:
                 employees[name].display_info()
-            else:
-                print(f"Employee {name} not found.")
-
-        elif choice == '4':
-            name = input("Enter employee name: ")
-            if name in employees:
                 overall_rate = employees[name].get_overall_success_rate()
                 print(f"Overall success rate for {name}: {overall_rate:.2f}")
             else:
                 print(f"Employee {name} not found.")
+
+        elif choice == '4':
+            input("Enter the job type: ")
+            assign_lead(job_type)
 
         elif choice == '5':
             print("Exiting...")
@@ -63,6 +64,11 @@ def main():
 
         else:
             print("Invalid option. Please choose a valid option.")
+
+        go_again = input("Do you want to keep working? (yes/no):").lower()
+        if go_again != 'yes':
+            print("Thank you. Goodbye!")
+            break
 
 
 if __name__ == "__main__":
